@@ -177,7 +177,7 @@ def refresh_disney_token(tokens):
     # Update tokens
     tokens["auth_token"] = data["access_token"]
     tokens["refresh_token"] = data["refresh_token"]
-    tokens["expire_time"] = data["exp"] * 1000  # seconds → ms
+    tokens["expire_time"] = data["exp"]  # already in ms
 
     save_disney_token(tokens)
 

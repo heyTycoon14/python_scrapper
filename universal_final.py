@@ -5,7 +5,7 @@ import requests
 from pathlib import Path
 import base64
 
-# from pricing import apply_pricing
+from pricing import apply_pricing
 import Configuration_Page as config
 from datetime import datetime, timedelta
 
@@ -365,13 +365,12 @@ def parse_response(data, ticket_cfg):
             base_price = float(pricing[0]["amount"])
             final_group_price = 0
 
-            # final_price = apply_pricing(
-            #     scraped_price=base_price,
-            #     discount=ticket_cfg["discount"],
-            #     minimum_price=ticket_cfg["min_price"],
-            #     flat_discount=config.Universal_Flat_Discount,
-            # )
-            final_price = base_price  # Placeholder until pricing function is restored
+            final_price = apply_pricing(
+                scraped_price=base_price,
+                discount=ticket_cfg["discount"],
+                minimum_price=ticket_cfg["min_price"],
+                flat_discount=config.Universal_Flat_Discount,
+            )
 
             savings = 0
             group_savings = 0
@@ -392,15 +391,12 @@ def parse_response(data, ticket_cfg):
                     )
 
             if ticket_cfg["group_ticket"] == True:
-                final_group_price = (
-                    base_price  # Placeholder until pricing function is restored
+                final_group_price = apply_pricing(
+                    scraped_price=base_price,
+                    discount=ticket_cfg["group_discount"],
+                    minimum_price=ticket_cfg["group_min_price"],
+                    flat_discount=config.Universal_Flat_Discount,
                 )
-                # final_group_price = apply_pricing(
-                #     scraped_price=base_price,
-                #     discount=ticket_cfg["group_discount"],
-                #     minimum_price=ticket_cfg["group_min_price"],
-                #     flat_discount=config.Universal_Flat_Discount,
-                # )
 
                 if float(base_price) > float(final_group_price):
                     group_savings = float(base_price) - float(final_group_price)
